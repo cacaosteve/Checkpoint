@@ -5,7 +5,7 @@
 //  Created by Adolfo Vera Blasco on 17/6/24.
 //
 
-import Combine
+import OpenCombine
 import Foundation
 
 public typealias WindowBasedAction = () throws -> Void

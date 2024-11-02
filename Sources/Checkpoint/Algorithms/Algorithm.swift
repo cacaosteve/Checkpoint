@@ -5,7 +5,7 @@
 //  Created by Adolfo Vera Blasco on 14/6/24.
 //
 
-import Combine
+import OpenCombine
 import Redis
 import Vapor
 

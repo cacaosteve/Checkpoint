@@ -5,7 +5,7 @@
 //  Created by Adolfo Vera Blasco on 15/6/24.
 //
 
-import Combine
+import OpenCombine
 import Foundation
 @preconcurrency import Redis
 import Vapor

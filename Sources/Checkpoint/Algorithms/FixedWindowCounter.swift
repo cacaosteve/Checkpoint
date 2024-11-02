@@ -26,7 +26,7 @@ public final class FixedWindowCounter {
 	public let logging: Logger?
 	
 	// The Combine Timer publishers
-	private var cancellable: AnyCancellable?
+	private var cancellable: OpenCombine.AnyCancellable?
 	// Keys stored in a given time window
 	private var keys = Set<String>()
 	

@@ -13,13 +13,13 @@ public typealias WindowBasedAction = () throws -> Void
 /// For those algorithims thar works with fixed time windows.
 public protocol WindowBasedAlgorithm: Algorithm {
 	/// Start the timer for a given duration (time window)
-	func startWindow(havingDuration seconds: Double, performing action: @escaping WindowBasedAction) -> AnyCancellable
+	func startWindow(havingDuration seconds: Double, performing action: @escaping WindowBasedAction) -> OpenCombine.AnyCancellable
 	/// Perfomrs the reset operation when the time windo ends.
 	func resetWindow() async throws
 }
 
 extension WindowBasedAlgorithm {
-	public func startWindow(havingDuration seconds: Double, performing action: @escaping WindowBasedAction) -> AnyCancellable {
+	public func startWindow(havingDuration seconds: Double, performing action: @escaping WindowBasedAction) -> OpenCombine.AnyCancellable {
 		var cancellable = Timer.publish(every: seconds, on: .main, in: .common)
 			.autoconnect()
 			.sink { _ in

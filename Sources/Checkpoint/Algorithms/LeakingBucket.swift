@@ -23,7 +23,7 @@ public final class LeakingBucket {
 	public let storage: Application.Redis
 	public let logging: Logger?
 	
-	private var cancellable: AnyCancellable?
+	private var cancellable: OpenCombine.AnyCancellable?
 	private var keys = Set<String>()
 	
 	public init(configuration: () -> LeakingBucketConfiguration, storage: StorageAction, logging: LoggerAction? = nil) {

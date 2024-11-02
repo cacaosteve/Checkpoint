@@ -23,7 +23,7 @@ public final class TokenBucket {
 	public let storage: Application.Redis
 	public let logging: Logger?
 	
-	private var cancellable: OpenCombine.AnyCancellable?
+	private var cancellable: AnyCancellable?
 	private var keys = Set<String>()
 	
 	public init(configuration: () -> TokenBucketConfiguration, storage: StorageAction, logging: LoggerAction? = nil) {

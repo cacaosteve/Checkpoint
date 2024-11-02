@@ -33,6 +33,7 @@ let package = Package(
             dependencies: [
                 .product(name: "Vapor", package: "vapor"),
                 .product(name: "Redis", package: "redis"),
+                .product(name: "OpenCombineFoundation", package: "OpenCombine"),
                 .product(name: "OpenCombine", package: "OpenCombine"),
             ]
         ),

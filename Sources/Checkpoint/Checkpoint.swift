@@ -9,8 +9,8 @@ import Redis
 import Vapor
 
 public typealias CheckpointHandler = (Request) -> Void
-public typealias CheckpointRateLimitHandler = (Request, Response, Checkpoint.ErrorMetadata) -> Void
-public typealias CheckpointErrorHandler = (Request, Response, AbortError, Checkpoint.ErrorMetadata) -> Void
+public typealias CheckpointRateLimitHandler = (Request, Checkpoint.ErrorMetadata) -> Void
+public typealias CheckpointErrorHandler = (Request, AbortError, Checkpoint.ErrorMetadata) -> Void
 
 public final class Checkpoint {
 	private let algorithm: any Algorithm
@@ -27,8 +27,6 @@ public final class Checkpoint {
 
 extension Checkpoint: AsyncMiddleware {
 	public func respond(to request: Request, chainingTo next: any AsyncResponder) async throws -> Response {
-		let response = try await next.respond(to: request)
-		
 		do {
 			willCheck?(request)
 			try await checkRateLimitFor(request: request)
@@ -38,13 +36,13 @@ extension Checkpoint: AsyncMiddleware {
 			
 			switch abort.status {
 				case .tooManyRequests:
-					didFailWithTooManyRequest?(request, response, errorMetadata)
+					didFailWithTooManyRequest?(request, errorMetadata)
 					
 					throw Abort(.tooManyRequests,
 								headers: errorMetadata.httpHeaders,
 								reason: errorMetadata.reason)
 				default:
-					didFail?(request, response, abort, errorMetadata)
+					didFail?(request, abort, errorMetadata)
 					
 					throw Abort(.badRequest,
 								headers: errorMetadata.httpHeaders,
@@ -52,7 +50,7 @@ extension Checkpoint: AsyncMiddleware {
 			}
 		}
 
-		return response
+		return try await next.respond(to: request)
 	}
 	
 	private func checkRateLimitFor(request: Request) async throws {

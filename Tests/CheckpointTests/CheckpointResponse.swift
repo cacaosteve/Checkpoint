@@ -36,7 +36,7 @@ final class CheckpointResponse: XCTestCase {
 		
 		let checkpoint = Checkpoint(using: leakingBucketAlgorithm)
 		
-		checkpoint.didFailWithTooManyRequest = { (request, response, metadata) in
+		checkpoint.didFailWithTooManyRequest = { (request, metadata) in
 			metadata.headers = [
 				"X-RateLimit" : "Failure for request \(request.id)"
 			]
@@ -85,7 +85,7 @@ final class CheckpointResponse: XCTestCase {
 		
 		let checkpoint = Checkpoint(using: tokenbucketAlgorithm)
 		
-		checkpoint.didFailWithTooManyRequest = { (request, response, metadata) in
+		checkpoint.didFailWithTooManyRequest = { (request, metadata) in
 			metadata.headers = [
 				"X-RateLimit" : "Failure for request \(request.id)"
 			]
@@ -132,7 +132,7 @@ final class CheckpointResponse: XCTestCase {
 		
 		let checkpoint = Checkpoint(using: fixedWindowAlgorithm)
 		
-		checkpoint.didFailWithTooManyRequest = { (request, response, metadata) in
+		checkpoint.didFailWithTooManyRequest = { (request, metadata) in
 			metadata.headers = [
 				"X-RateLimit" : "Failure for request \(request.id)"
 			]
@@ -179,7 +179,7 @@ final class CheckpointResponse: XCTestCase {
 		
 		let checkpoint = Checkpoint(using: slidingWindowLogAlgorith)
 		
-		checkpoint.didFailWithTooManyRequest = { (request, response, metadata) in
+		checkpoint.didFailWithTooManyRequest = { (request, metadata) in
 			metadata.headers = [
 				"X-RateLimit" : "Failure for request \(request.id)"
 			]

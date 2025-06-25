@@ -23,7 +23,7 @@ let package = Package(
         // Redis. Rate-Limit middleware
         .package(url: "https://github.com/vapor/redis.git", from: "4.0.0"),
         // Combine support for non macOS builds
-        .package(url: "https://github.com/OpenCombine/OpenCombine.git", from: "0.14.0"),
+        .package(url: "https://github.com/OpenSwiftUIProject/OpenCombine", branch: "main"),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.

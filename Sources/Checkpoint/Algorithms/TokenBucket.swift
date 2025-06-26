@@ -16,7 +16,7 @@ import Vapor
  Extra tokens will overflow once the bucket is full.
  
  • We take 1 token out for each request and if there are enough tokens, then the request is processed.
- • The request is dropped if there aren’t enough tokens.
+ • The request is dropped if there aren't enough tokens.
 */
 public final class TokenBucket {
 	private let configuration: TokenBucketConfiguration
@@ -25,6 +25,7 @@ public final class TokenBucket {
 	
 	private var cancellable: AnyCancellable?
 	private var keys = Set<String>()
+	private let lock = Lock()
 	
 	public init(configuration: () -> TokenBucketConfiguration, storage: StorageAction, logging: LoggerAction? = nil) {
 		self.configuration = configuration()
@@ -54,7 +55,9 @@ extension TokenBucket: WindowBasedAlgorithm {
 			return
 		}
 		
-		keys.insert(requestKey)
+		lock.withLock {
+			keys.insert(requestKey)
+		}
 		let redisKey = RedisKey(requestKey)
 		
 		let keyExists = try await storage.exists(redisKey).get()
@@ -72,7 +75,11 @@ extension TokenBucket: WindowBasedAlgorithm {
 	}
 	
 	public func resetWindow() throws {
-		keys.forEach { key in
+		let currentKeys = lock.withLock {
+			self.keys
+		}
+
+		currentKeys.forEach { key in
 			Task(priority: .userInitiated) {
 				let redisKey = RedisKey(key)
 			

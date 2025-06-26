@@ -70,6 +70,7 @@ extension TokenBucket: WindowBasedAlgorithm {
 		let bucketItemsCount = try await storage.decrement(redisKey).get()
 		// 2. If buckes is empty, throw an error
 		if bucketItemsCount < 0 {
+			logging?.warning("🚨 Rate limit exceeded for key \(redisKey.rawValue). Rejecting request.")
 			throw Abort(.tooManyRequests)
 		}
 	}
